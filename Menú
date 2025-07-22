@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menú Interactivo - Delicioso</title>
+    <meta name="description" content="Menú interactivo con anticucho, empanadas, tortas y más delicias">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .title {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d, #6bcf7f);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            animation: titlePulse 3s ease-in-out infinite;
+        }
+        
+        .subtitle {
+            color: white;
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        @keyframes titlePulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .menu-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 40px;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .tab-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 50px;
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .tab-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .tab-button:hover::before {
+            left: 100%;
+        }
+        
+        .tab-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .tab-button.active {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            transform: scale(1.1);
+        }
+        
+        .menu-content {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
+        }
+        
+        .menu-content.active {
+            display: block;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .menu-item {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .menu-item::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            transform: scale(0);
+            transition: transform 0.6s ease;
+        }
+        
+        .menu-item:hover::before {
+            transform: scale(1);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-10px) rotate(2deg);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .item-icon {
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 15px;
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+        
+        .item-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: white;
+            text-align: center;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .item-description {
+            color: rgba(255, 255, 255, 0.9);
+            text-align: center;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        
+        .price {
+            background: linear-gradient(45deg, #ff6b6b, #ffd93d);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-top: 15px;
+            text-align: center;
+            font-size: 1.1rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .floating-elements {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .float-item {
+            position: absolute;
+            font-size: 2rem;
+            opacity: 0.1;
+            animation: float 15s linear infinite;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.1;
+            }
+            90% {
+                opacity: 0.1;
+            }
+            100% {
+                transform: translateY(-10vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .title {
+                font-size: 2.5rem;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            .menu-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .tab-button {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            color: white;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-elements">
+        <div class="float-item" style="left: 10%; animation-delay: 0s;">🍖</div>
+        <div class="float-item" style="left: 20%; animation-delay: 3s;">🍟</div>
+        <div class="float-item" style="left: 30%; animation-delay: 6s;">🥪</div>
+        <div class="float-item" style="left: 40%; animation-delay: 9s;">🧁</div>
+        <div class="float-item" style="left: 50%; animation-delay: 12s;">🍰</div>
+        <div class="float-item" style="left: 60%; animation-delay: 15s;">☕</div>
+        <div class="float-item" style="left: 70%; animation-delay: 18s;">🥤</div>
+        <div class="float-item" style="left: 80%; animation-delay: 21s;">🧃</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">🍽️ Menú Delicioso</h1>
+            <p class="subtitle">Descubre nuestros sabores únicos</p>
+        </div>
+        
+        <div class="menu-tabs">
+            <button class="tab-button active" onclick="showTab('salados')">
+                🍖 Salados
+            </button>
+            <button class="tab-button" onclick="showTab('dulces')">
+                🍰 Dulces
+            </button>
+            <button class="tab-button" onclick="showTab('bebidas')">
+                🥤 Bebidas
+            </button>
+        </div>
+        
+        <div id="salados" class="menu-content active">
+            <h2 class="section-title">🔥 Platos Salados</h2>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🍖</div>
+                    <h3 class="item-name">Anticucho</h3>
+                    <p class="item-description">Deliciosos brochetas de corazón de res marinado con ají panca y especias, asado a la parrilla con el sabor tradicional peruano</p>
+                    <div class="price">$8.500</div>
+                </div>
+                
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🍟</div>
+                    <h3 class="item-name">Papas Fritas</h3>
+                    <p class="item-description">Crujientes papas cortadas a mano, doradas a la perfección y sazonadas con sal de mar. El acompañamiento perfecto</p>
+                    <div class="price">$3.200</div>
+                </div>
+                
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🌭</div>
+                    <h3 class="item-name">Choripán</h3>
+                    <p class="item-description">Chorizo argentino asado en pan crujiente, acompañado de chimichurri casero y cebolla caramelizada</p>
+                    <div class="price">$5.800</div>
+                </div>
+                
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🥟</div>
+                    <h3 class="item-name">Empanadas</h3>
+                    <p class="item-description">Empanadas caseras horneadas con relleno de pino, queso o pollo. Masa dorada y crujiente con ingredientes frescos</p>
+                    <div class="price">$2.800</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="dulces" class="menu-content">
+            <h2 class="section-title">🍰 Delicias Dulces</h2>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🍰</div>
+                    <h3 class="item-name">Torta</h3>
+                    <p class="item-description">Exquisita torta de chocolate con cobertura de crema batida y frutas frescas. Perfecta para celebrar momentos especiales</p>
+                    <div class="price">$12.500</div>
+                </div>
+                
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🍰</div>
+                    <h3 class="item-name">Kuchen</h3>
+                    <p class="item-description">Tradicional kuchen alemán con masa esponjosa y frutas de temporada. Una delicia europea en cada bocado</p>
+                    <div class="price">$9.800</div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="bebidas" class="menu-content">
+            <h2 class="section-title">🥤 Bebidas Refrescantes</h2>
+            <div class="menu-grid">
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🥤</div>
+                    <h3 class="item-name">Bebida</h3>
+                    <p class="item-description">Refrescantes bebidas gaseosas de diferentes sabores. Cola, naranja, limón y más opciones para acompañar tu comida</p>
+                    <div class="price">$1.800</div>
+                </div>
+                
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🧃</div>
+                    <h3 class="item-name">Jugo Natural</h3>
+                    <p class="item-description">Jugos naturales de frutas frescas: naranja, manzana, piña, maracuyá. Sin azúcar añadida, pura vitamina</p>
+                    <div class="price">$2.500</div>
+                </div>
+                
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">☕</div>
+                    <h3 class="item-name">Café</h3>
+                    <p class="item-description">Café de grano selecto, tostado y molido al momento. Espresso, americano, cappuccino o latte con espuma cremosa</p>
+                    <div class="price">$2.200</div>
+                </div>
+                
+                <div class="menu-item" onclick="selectItem(this)">
+                    <div class="item-icon">🍵</div>
+                    <h3 class="item-name">Té</h3>
+                    <p class="item-description">Selección de tés premium: negro, verde, manzanilla, boldo. Perfectos para relajarse y disfrutar</p>
+                    <div class="price">$1.500</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            const contents = document.querySelectorAll('.menu-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            const buttons = document.querySelectorAll('.tab-button');
+            buttons.forEach(button => {
+                button.classList.remove('active');
+            });
+            
+            document.getElementById(tabName).classList.add('active');
+            event.target.classList.add('active');
+        }
+        
+        function selectItem(item) {
+            item.style.transform = 'scale(0.95)';
+            item.style.transition = 'transform 0.1s ease';
+            
+            setTimeout(() => {
+                item.style.transform = 'scale(1.05)';
+                setTimeout(() => {
+                    item.style.transform = '';
+                }, 200);
+            }, 100);
+            
+            const originalBackground = item.style.background;
+            item.style.background = 'rgba(255, 255, 255, 0.3)';
+            setTimeout(() => {
+                item.style.background = originalBackground;
+            }, 300);
+        }
+        
+        function createFloatingElement() {
+            const emojis = ['🍖', '🍟', '🌭', '🥟', '🍰', '☕', '🥤', '🧃'];
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            
+            const element = document.createElement('div');
+            element.className = 'float-item';
+            element.textContent = emoji;
+            element.style.left = Math.random() * 100 + '%';
+            element.style.animationDuration = (10 + Math.random() * 10) + 's';
+            element.style.animationDelay = Math.random() * 5 + 's';
+            
+            document.querySelector('.floating-elements').appendChild(element);
+            
+            setTimeout(() => {
+                element.remove();
+            }, 20000);
+        }
+        
+        setInterval(createFloatingElement, 3000);
+        
+        document.addEventListener('mousemove', (e) => {
+            const items = document.querySelectorAll('.menu-item');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            items.forEach((item, index) => {
+                const speed = (index % 3 + 1) * 0.5;
+                const xOffset = (x - 0.5) * speed;
+                const yOffset = (y - 0.5) * speed;
+                
+                item.style.transform = `translate(${xOffset}px, ${yOffset}px)`;
+            });
+        });
+    </script>
+</body>
+</html>
